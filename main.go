@@ -43,6 +43,20 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func handleMessages() {
+	for {
+		msg := <-broadcast
+		for client := range clients {
+			err := client.WriteJSON(msg)
+			if err != nil {
+				log.Printf("error: %v", err)
+				client.Close()
+				delete(clients, client)
+			}
+		}
+	}
+}
+
 func main() {
 	fmt.Println("App started.")
 
@@ -50,6 +64,8 @@ func main() {
 
 	http.Handle("/", fs)
 	http.HandleFunc("/ws", handleConnections)
+
+	go handleMessages()
 
 	fmt.Println("Http server is running on http://localhost:8000")
 	err := http.ListenAndServe("localhost:8000", fs)
