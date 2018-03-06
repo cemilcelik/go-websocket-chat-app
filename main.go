@@ -3,7 +3,18 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/gorilla/websocket"
 )
+
+type Message struct {
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Message  string `json:"message"`
+}
+
+var clients = make(map[*websocket.Conn]bool)
+var broadcast = make(chan Message)
 
 func main() {
 	fmt.Println("App started.")
