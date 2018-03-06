@@ -16,6 +16,11 @@ type Message struct {
 var clients = make(map[*websocket.Conn]bool)
 var broadcast = make(chan Message)
 
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+}
+
 func main() {
 	fmt.Println("App started.")
 
