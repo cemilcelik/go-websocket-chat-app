@@ -68,7 +68,7 @@ func main() {
 	go handleMessages()
 
 	fmt.Println("Http server is running on http://localhost:8000")
-	err := http.ListenAndServe("localhost:8000", fs)
+	err := http.ListenAndServe("localhost:8000", nil)
 	if err != nil {
 		fmt.Println("ListenAndServe:", err)
 	}
